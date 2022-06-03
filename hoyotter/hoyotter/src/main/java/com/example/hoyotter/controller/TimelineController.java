@@ -42,8 +42,9 @@ public class TimelineController {
 	@Autowired
 	private Gson gson;
 	
+	@ResponseBody
 	@RequestMapping("/addComment")
-	public String addComment( CommentForm commentForm, LoginForm loginForm, Model model) {
+	public String addComment(@RequestBody CommentForm commentForm, LoginForm loginForm, Model model) {
 		
 		Date now = new Date();
 		Comment comment = new Comment();
@@ -65,8 +66,9 @@ public class TimelineController {
 		}
 		model.addAttribute("otherUsers", otherUsers);
 		}
-		
-		return "forward:/timeline";
+		List<Comment> ajaxComs = commentRepos.findAllByOrderByIdDesc(); 
+		/*return "forward:/timeline";*/
+		return gson.toJson(ajaxComs);
 	}
 	
 	@ResponseBody

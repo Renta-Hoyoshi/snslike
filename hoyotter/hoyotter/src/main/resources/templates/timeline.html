@@ -26,6 +26,7 @@
             $(() => {
             
             $(document).on('click','#myBtn', myProfile);
+            $(document).on('click','.commentBtn', addComment);
             $(document).on('click','#otherUserBtn', othersProfile);
             $(document).on('click','#editBtn', editProfile);
             $(document).on('click','#doneBtn', uploadProfile);
@@ -87,11 +88,10 @@
             <div class="center">
                 <h1>Timeline</h1>
                 <div class="yourForm">
-                    <form action="/addComment" th:action="@{/addComment}" method="post" class="commentForm" id="commentForm" >
+                    <form method="post" class="commentForm" id="commentForm" th:objext="${commentForm}">
                         <input type="button" class="userBtn" id="myBtn" >
                         <input type="text" class="inputCom" placeholder="input your comment" name="comment">
                         <input type="hidden" id="userName" name="userName" th:value="${loginSession.userName}">
-                        
                         <input type="submit" value="comment" class="commentBtn">
                     </form><!--.commentForm-->
                 </div><!--.yourForm-->
@@ -99,6 +99,10 @@
                 <div class="square">Comments</div>
 
                 <div class="timeline">
+                    <div class="ajaxItem">
+                    
+                    
+                    </div>
                     <div class="item">
                         <div class="userAndTime" th:each="item : ${comments}">
                             <input type="button" class="userBtn"/>

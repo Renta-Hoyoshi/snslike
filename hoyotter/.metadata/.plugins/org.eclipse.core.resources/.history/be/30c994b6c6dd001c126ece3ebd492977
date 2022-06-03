@@ -1,9 +1,0 @@
-package com.example.hoyotter.model.dao;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.example.hoyotter.model.entity.Comment;
-
-public interface CommentRepository extends JpaRepository<Comment, Long>{
-
-}

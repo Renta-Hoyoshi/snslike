@@ -1,3 +1,41 @@
+let addComment = (e) => {
+	e.preventDefault();
+	let jsonString = {
+		'userName': $('input[name=userName]').val(),
+		'comment': $('input[name=comment]').val()
+	};
+	$.ajax({
+		type: 'POST',
+		url: '/addComment',
+		data: JSON.stringify(jsonString),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let ajaxComList = JSON.parse(result);
+		let ajaxItem = $('.timeline').find('.ajaxItem');
+		
+		$(ajaxItem).children().remove();
+		$('.item').children().remove();
+		
+		
+		ajaxComList.forEach((ajaxCom, index) => {
+			//above
+			let userAndTime = $('<div />', { 'class': 'userAndTime'} );
+			$('<p />', {  'class': 'userBtn' } ).appendTo(userAndTime);
+			$('<p />', {  'class': 'name', 'text': ajaxCom.userName } ).appendTo(userAndTime);
+			$('<p />', {  'class': 'time', 'text': ajaxCom.postedAt } ).appendTo(userAndTime);
+			$('<p />', {  'class': 'userComment', 'text': ajaxCom.comment } ).appendTo(userAndTime);
+			$(userAndTime).appendTo(ajaxItem);
+		});
+		$('input[name=comment]').val("");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+};
+
 let myProfile = (e) => {
 	e.preventDefault();
 	let jsonString = {
