@@ -1,0 +1,53 @@
+package com.example.hoyotter.controller;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.hoyotter.model.dao.CommentRepository;
+import com.example.hoyotter.model.dao.UserRepository;
+import com.example.hoyotter.model.entity.Comment;
+import com.example.hoyotter.model.entity.User;
+import com.example.hoyotter.model.form.LoginForm;
+
+
+@Controller
+public class LoginController {
+	
+	@Autowired
+	private UserRepository userRepos;
+	
+	@Autowired
+	private CommentRepository commentRepos;
+    
+	@RequestMapping("/")
+	public String index(Model model) {
+		
+		return "login";
+	}
+	
+	
+	
+	@RequestMapping("/timeline")
+	public String loginToTimeline(LoginForm loginForm, Model model) {
+		//userReposの値とloginFormの値を比較して、合致するものを取ってくる
+		List<User> users = userRepos.findByUserNameAndPassword(loginForm.getUserName(), loginForm.getPassword());
+		
+		//取ってきたDBの情報をviewへ送る
+		if( users != null && users.size() > 0 ) {
+		model.addAttribute("userId", users.get(0).getId());
+	    model.addAttribute("userName", users.get(0).getUserName());
+	    model.addAttribute("password", users.get(0).getPassword());
+	    
+		}
+		List<Comment> comments = commentRepos.findAllByOrderByIdDesc(); 
+		
+		model.addAttribute("comments", comments);
+		
+		return "timeline";
+	}
+}

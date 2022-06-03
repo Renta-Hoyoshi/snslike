@@ -1,0 +1,27 @@
+package com.example.hoyotter.model.dao;
+
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.example.hoyotter.model.entity.User;
+
+public interface UserRepository extends JpaRepository<User, Long>{
+	List<User> findByUserNameAndPassword(String userName, String password);
+	
+	@Query(value="UPDATE TABLE user u SET user_id=?1, user_name=?2, password=?3, profile=?4 WHERE u.user_id=:userId", nativeQuery=true)
+	
+	List<User> findLoginUser(@Param("userId") long userId);
+	
+	@Transactional
+	@Modifying
+	void update (@Param("userId") long userId,
+			     @Param("userName") String userName,
+			     @Param("password") String password,
+			     @Param("profile") String profile);
+}

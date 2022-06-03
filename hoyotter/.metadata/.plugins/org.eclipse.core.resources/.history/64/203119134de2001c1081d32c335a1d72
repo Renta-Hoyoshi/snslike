@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title>hoyotter:Timeline</title>
+        <!--favicon-->
+        <link rel="icon" type="image/png" href="images/favicon.ico">
+        <!--defaultcss-->
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">   
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <!--fonts-->
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+        
+        <!--css-->
+        <link href="css/timeline.css" rel="stylesheet">
+        <!--js-->
+        <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="/js/timeline.js" th:src="@{/js/timeline.js}"></script>
+        <script>
+            $(() => {
+            
+            $(document).on('click','#myBtn', myProfile);
+            $(document).on('click','#otherUserBtn', othersProfile);
+            $(document).on('click','#editBtn', editProfile);
+            $(document).on('click','#doneBtn', uploadProfile);
+            $("#mypage").dialog({
+		            autoOpen: false,
+		            height: 600,
+		            width: 550,
+		            modal: true,
+		            buttons: [
+		                {
+			                text: 'OK',
+			                click: function() {
+				                       $(this).dialog("close");
+			                       }
+		                 },
+		            ]
+	        });
+	        $("#othersPage").dialog({
+		            autoOpen: false,
+		            height: 600,
+		            width: 550,
+		            modal: true,
+		            buttons: [
+		                {
+			                text: 'OK',
+			                click: function() {
+				                       $(this).dialog("close");
+			                       }
+		                 },
+		            ]
+	        });
+            });
+        </script>
+        
+    </head>
+    
+    <body>
+        
+        <main>
+            
+            <div class="left">
+                <h1>hoyotter</h1>
+                <ul>
+                    
+                    <li><a id="myBtn">Mypage</a></li>
+                    <li><a href="login.html" th:href="@{/}">Account Change</a></li>
+                    <li><a href="register.html" th:href="@{/register}">Register Account</a></li>
+                </ul>
+                <input type="hidden" id="hiddenUserId" th:value="${loginSession.id}"/>
+                <input type="hidden" id="hiddenUserName" th:value="${loginSession.userName}"/>
+                <input type="hidden" id="hiddenPassword" name="password" th:value="${loginSession.password}">
+                <input type="hidden" id="hiddenProfile" name="profile" th:value="${loginSession.profile}">
+            </div><!--.left-->
+
+            <div class="center">
+                <h1>Timeline</h1>
+                <div class="yourForm">
+                    <form action="/addComment" th:action="@{/addComment}" method="post" class="commentForm" id="commentForm" >
+                        <input type="button" class="userBtn" id="myBtn" >
+                        <input type="text" class="inputCom" placeholder="input your comment" name="comment">
+                        <input type="hidden" id="userName" name="userName" th:value="${loginSession.userName}">
+                        
+                        <input type="submit" value="comment" class="commentBtn">
+                    </form><!--.commentForm-->
+                </div><!--.yourForm-->
+
+                <div class="square">Comments</div>
+
+                <div class="timeline">
+                    <div class="item">
+                        <div class="userAndTime" th:each="item : ${comments}">
+                            <input type="button" class="userBtn"/>
+                            <p class="name" th:text="${item.userName}"></p>                            
+                            <p class="time" th:text="${item.postedAt}"></p>
+                            <p class="userComment" th:text="${item.comment}"></p>
+                        </div>
+                    </div>
+                    
+                    
+                </div><!--timeline-->
+                
+                <div  id="mypage" style="display:none;">
+                    <div class="above">
+                        
+                    </div>
+                    <div class="under">
+                    
+                    </div>
+                </div>
+            </div><!--.center-->
+
+            <div class="right">
+                <h1>Other Users</h1>
+                <div class="usersTable">
+                    <div class="users" th:each="others : ${otherUsers}">
+                        <form  method="post" class="user" id="othersForm" name="othersForm" target="othersPage">
+                        <input type="button" class="userBtn" id="otherUserBtn" value="">
+                        <input id="othersName" th:value="${others.userName}" name="othersUserName"/>
+                        <input type="hidden" id="hiddenOthersId" th:value="${others.id}" name="othersUserId"/>
+                        </form>
+                    
+                    </div><!--.users-->
+                </div>    
+                 <iframe id="othersPage" style="display:none;">
+                    <div class="above">
+                        
+                    </div>
+                    <div class="under">
+                    
+                    </div>
+                </iframe>
+            </div><!--.right-->
+
+        </main>
+        
+    </body>
+
+</html>

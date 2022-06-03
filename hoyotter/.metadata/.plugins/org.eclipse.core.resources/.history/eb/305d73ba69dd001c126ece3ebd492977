@@ -1,0 +1,7 @@
+package com.example.hoyotter.model.entity;
+
+@Entity
+@Table(name="comment")
+public class Comment{
+    
+}
