@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title>Hoyotter:login</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">   
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googlepis.com/css?family=philosopher" rel="stylesheet">
+        <link href="/css/login.css" rel="stylesheet">
+    </head>
+    
+    <body>
+        <header>
+                <h1 class="logo">Hoyotter</h1>
+                <div class="register"><a href="register.html" th:href="@{/hoyotter/register}">Register Page</a></div>
+        </header>
+
+        <main>
+            <div class="loginTable">
+                <form method="post" action="" id="loginForm">
+                    <p>Username<br><input type="text" id="userName" name="userName"></p>
+                    <p>Password<br><input type="password" id="password" name="password"></p>
+                    <p class="login"><input type="submit" value="login" id="loginBtn"></p>
+                </form>
+            </div>
+        </main>
+        <script type="text/javascript" src="logreg.js"></script>
+    </body>
+</html>

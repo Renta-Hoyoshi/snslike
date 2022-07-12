@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title>Hoyotter:Registration Completed</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">   
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googlepis.com/css?family=philosopher" rel="stylesheet">
+        <link href="/css/register_done.css" rel="stylesheet">
+    </head>
+    
+    <body>
+        <header>
+                <h1 class="logo">Hoyotter</h1>
+        </header>
+
+        <main>
+            <div class="registerDoneTable">
+                <div class="done_contents">
+                    <p>Your registration has been completed.</p>
+                    <p><a href="login.html" th:href="@{/hoyotter/}">Go to Login Page</a></p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>© 2022 Renta Hoyoshi<p>
+        </footer>
+        
+    </body>
+</html>

@@ -1,0 +1,32 @@
+let myProfile = (e) => {
+	$.ajax({
+		type: 'POST',
+		url: '/mypage',
+		data: JSON.stringify({  "userId": $('#hiddenUserId').val() }),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let historyList = JSON.parse(result);
+		let tbody = $('#historyTable').find('tbody');
+		$(tbody).children().remove();
+		historyList.forEach((history, index) => {
+			let tr = $('<tr />');
+			
+			$('<td />', { 'text': history.goodsName }).appendTo(tr);
+			$('<td />', { 'text': history.itemCount }).appendTo(tr);
+			$('<td />', { 'text': history.createdAt }).appendTo(tr);
+			
+			$(tr).appendTo(tbody);
+		});
+		$("#history").dialog("open");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+};
+
+let otherProfile = (e) => {
+	
+};

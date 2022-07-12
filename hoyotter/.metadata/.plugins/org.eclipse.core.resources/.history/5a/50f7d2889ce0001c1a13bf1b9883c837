@@ -1,0 +1,39 @@
+let myProfile = (e) => {
+	$.ajax({
+		type: 'POST',
+		url: '/mypage',
+		data: JSON.stringify({  "userId": $('#hiddenUserId').val(),
+		                        "userName": $('#userName').val() }),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let myselfList = JSON.parse(result);
+		let mypageAbove = $('#mypage').find('.above');
+		let mypageBottom = $('#mypage').find('.bottom');
+		$(mypageAbove).children().remove();
+		$(mypageBottom).children().remove();
+		
+		myselfList.forEach((myself, index) => {
+			//above
+			$('<p />', {  'class': 'myImg' } ).appendTo(mypageAbove);
+			$('<p />', {  'class': 'myId', 'text': myself.id } ).appendTo(mypageAbove);
+			$('<p />', {  'class': 'myName', 'text': myself.userName } ).appendTo(mypageAbove);
+			$('<p />', {  'class': 'myIntro', 'text': myself.profile } ).appendTo(mypageAbove);
+			$('<button />', {  'id': 'editBtn', 'text': 'edit' } ).appendTo(mypageAbove);
+			
+			//bottom
+			$('<p />', {  'class': 'myId', 'text': myself.id } ).appendTo(mypageBottom);
+			
+		});
+		$("#mypage").dialog("open");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+};
+
+let otherProfile = (e) => {
+	
+};

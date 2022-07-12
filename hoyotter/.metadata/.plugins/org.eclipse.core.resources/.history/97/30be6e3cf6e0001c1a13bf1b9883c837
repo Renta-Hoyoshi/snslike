@@ -1,0 +1,149 @@
+package com.example.hoyotter.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+import com.example.hoyotter.model.dao.CommentRepository;
+import com.example.hoyotter.model.dao.UserRepository;
+
+import com.example.hoyotter.model.entity.Comment;
+import com.example.hoyotter.model.entity.User;
+import com.example.hoyotter.model.form.CommentForm;
+import com.example.hoyotter.model.form.LoginForm;
+import com.example.hoyotter.model.form.UploadForm;
+import com.example.hoyotter.model.session.LoginSession;
+import com.google.gson.Gson;
+
+@Controller
+public class TimelineController {
+    
+	@Autowired
+	private LoginSession loginSession;
+	
+	@Autowired
+	private UserRepository userRepos;
+	
+	@Autowired
+	private CommentRepository commentRepos;
+	
+	@Autowired
+	private Gson gson;
+	
+	@RequestMapping("/addComment")
+	public String addComment( CommentForm commentForm, LoginForm loginForm, Model model) {
+		model.addAttribute("id", loginForm.getId());
+		model.addAttribute("userName", loginForm.getUserName());
+		model.addAttribute("password", loginForm.getPassword());
+		Date now = new Date();
+		Comment comment = new Comment();
+		comment.setComment(commentForm.getComment());
+		comment.setUserName(commentForm.getUserName());
+		comment.setPostedAt(now);
+		commentRepos.saveAndFlush(comment);
+		
+		
+		List<User> users = userRepos.findByUserNameAndPassword(loginSession.getUserName(), loginSession.getPassword());
+		if( users != null && users.size() > 0 ) {	
+		List<User> u = userRepos.findAll();
+		List<User> otherUsers = new ArrayList<>();
+		for(User others : u ) {
+			if(others == users.get(0)) {
+				continue;
+			}	
+			otherUsers.add(others);
+		}
+		model.addAttribute("otherUsers", otherUsers);
+		}
+		
+		return "forward:/timeline";
+	}
+	
+	@ResponseBody
+	@PostMapping("/mypage")
+	public String mypage() {
+		
+		List<User> userInfo = userRepos.findByUserNameAndPassword(loginSession.getUserName(), loginSession.getPassword());
+		return gson.toJson(userInfo);
+	}
+	
+	@ResponseBody
+	@PostMapping("/mypage_under")
+	public String mypageUnder() {
+		
+		List<Comment> coms = commentRepos.findByUserName(loginSession.getUserName());
+		return gson.toJson(coms);
+	}
+	
+	@ResponseBody
+	@PostMapping("/otherspage")
+	public String othersPage() {
+		
+		List<User> users = userRepos.findByUserNameAndPassword(loginSession.getUserName(), loginSession.getPassword());
+		List<User> otherUsers = new ArrayList<>();
+		if( users != null && users.size() > 0 ) {	
+			List<User> u = userRepos.findAll();
+			
+			for(User others : u ) {
+				if(others == users.get(0)) {
+					continue;
+				}	
+				otherUsers.add(others);
+			}
+			
+		}
+		return gson.toJson(otherUsers);
+	}
+	
+	@ResponseBody
+	@PostMapping("/otherspage_under")
+	public String othersPageUnder() {
+		
+		List<Comment> coms = commentRepos.findByUserName(loginSession.getUserName());
+		List<Comment> otherUsersComs = new ArrayList<>();
+		if( coms != null && coms.size() > 0 ) {	
+			List<Comment> c = commentRepos.findAll();
+			
+			for(Comment othersComs : c ) {
+				if(othersComs == coms.get(0)) {
+					continue;
+				}	
+				otherUsersComs.add(othersComs);
+			}
+		}
+		return gson.toJson(otherUsersComs);
+	}
+	
+	@ResponseBody
+	@PostMapping("/edit")
+	public String editMyPage() {
+		
+		List<User> userInfo = userRepos.findByUserNameAndPassword(loginSession.getUserName(), loginSession.getPassword());
+		return gson.toJson(userInfo);
+	}
+	
+	@ResponseBody
+	@PostMapping("/upload")
+	public String uploadMyPage(@RequestBody UploadForm uploadForm) {
+		List<User> user = userRepos.findByUserNameAndPassword(loginSession.getUserName(), loginSession.getPassword());
+		for(User u : user) {
+			u.setUserName(uploadForm.getUserName());
+			u.setPassword(uploadForm.getPassword());
+			userRepos.saveAndFlush(u);
+			System.out.println(u);
+		}
+		
+		List<User> userInfo = userRepos.findByUserNameAndPassword(loginSession.getUserName(), loginSession.getPassword());
+		return gson.toJson(userInfo);
+	}
+}

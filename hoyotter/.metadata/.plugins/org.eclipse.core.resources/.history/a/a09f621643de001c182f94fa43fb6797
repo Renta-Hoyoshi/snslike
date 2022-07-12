@@ -1,0 +1,54 @@
+package com.example.hoyotter.controller;
+
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.hoyotter.model.dao.CommentRepository;
+import com.example.hoyotter.model.dao.UserRepository;
+import com.example.hoyotter.model.entity.Comment;
+import com.example.hoyotter.model.form.CommentForm;
+import com.example.hoyotter.model.form.LoginForm;
+import com.example.hoyotter.model.session.LoginSession;
+
+@Controller
+public class TimelineController {
+    
+	@Autowired
+	private LoginSession loginSession;
+	
+	@Autowired
+	private UserRepository userRepos;
+	
+	@Autowired
+	private CommentRepository commentRepos;
+	
+	@RequestMapping("/addComment")
+	public String addComment( CommentForm commentForm, LoginForm loginForm, Model model) {
+		model.addAttribute("id", loginForm.getId());
+		model.addAttribute("userName", loginForm.getUserName());
+		model.addAttribute("password", loginForm.getPassword());
+		Date now = new Date();
+		Comment comment = new Comment();
+		comment.setComment(commentForm.getComment());
+		comment.setUserName(commentForm.getUserName());
+		comment.setPostedAt(now);
+		commentRepos.saveAndFlush(comment);
+		
+		
+		return "forward:/timeline";
+	}
+	
+	@RequestMapping("/return_timeline")
+	public String returnTimeline(LoginSession loginSession, Model model) {
+		model.addAttribute("loginSession", loginSession);
+		
+		return "redirect:/timeline";
+	}
+}

@@ -1,0 +1,28 @@
+package com.example.hoyotter.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class RegisterController {
+    
+	@RequestMapping("/register")
+	public ModelAndView registerPage(ModelAndView mav) {
+		System.out.println("OK");
+		mav.setViewName("register");
+		System.out.println("OK2");
+		return mav;
+	}
+	
+	@RequestMapping("/register_confirm")
+	public String confirm(@RequestParam String userName,
+			              @RequestParam String password,
+			              Model model) {
+		model.addAttribute("userName",userName);
+		model.addAttribute("password",password);
+		return "register_confirm";
+	}
+}

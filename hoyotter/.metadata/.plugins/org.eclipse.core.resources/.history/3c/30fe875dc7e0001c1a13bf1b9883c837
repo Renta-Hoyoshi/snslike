@@ -1,0 +1,117 @@
+let myProfile = (e) => {
+	$.ajax({
+		type: 'POST',
+		url: '/mypage',
+		data: JSON.stringify({  "userId": $('#hiddenUserId').val() }),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let myselfList = JSON.parse(result);
+		let mypageAbove = $('#mypage').find('.above');
+		
+		$(mypageAbove).children().remove();
+		
+		
+		myselfList.forEach((myself, index) => {
+			//above
+			$('<p />', {  'class': 'myImg' } ).appendTo(mypageAbove);
+			$('<p />', {  'class': 'myId', 'text': myself.id } ).appendTo(mypageAbove);
+			$('<p />', {  'class': 'myName', 'text': myself.userName } ).appendTo(mypageAbove);
+			$('<p />', {  'class': 'myIntro', 'text': myself.profile } ).appendTo(mypageAbove);
+			$('<button />', {  'id': 'editBtn', 'text': 'edit' } ).appendTo(mypageAbove);
+		});
+		$("#mypage").dialog("open");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+	
+	$.ajax({
+		type: 'POST',
+		url: '/mypage_under',
+		data: JSON.stringify({ "userName": $('#userName').val() }),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let myselfList = JSON.parse(result);
+		let mypageUnder = $('#mypage').find('.under');
+		
+		$(mypageUnder).children().remove();
+		
+		myselfList.forEach((myself, index) => {
+			//bottom
+			let myItem = $('<div />', { 'class': 'myItem'});
+			$('<p />', {  'class': 'myNameUnder', 'text': myself.userName } ).appendTo(myItem);
+			$('<p />', {  'class': 'myPostTime', 'text': myself.postedAt } ).appendTo(myItem);
+			$('<p />', {  'class': 'myComment', 'text': myself.comment } ).appendTo(myItem);
+			$(myItem).appendTo(mypageUnder);
+		})
+		$("#mypage").dialog("open");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+};
+
+let othersProfile = (e) => {
+	$.ajax({
+		type: 'POST',
+		url: '/otherspage',
+		data: JSON.stringify({  "userId": $('#hiddenOthersId').val() }),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let othersList = JSON.parse(result);
+		let otherspageAbove = $('#otherspage').find('.above');
+		
+		$(otherpageAbove).children().remove();
+		
+		
+		othersList.forEach((others, index) => {
+			//above
+			$('<p />', {  'class': 'othersImg' } ).appendTo(otherspageAbove);
+			$('<p />', {  'class': 'othersId', 'text': others.id } ).appendTo(otherspageAbove);
+			$('<p />', {  'class': 'othersName', 'text': others.userName } ).appendTo(otherspageAbove);
+			$('<p />', {  'class': 'othersIntro', 'text': others.profile } ).appendTo(otherspageAbove);
+			
+		});
+		$("#otherspage").dialog("open");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+	
+	$.ajax({
+		type: 'POST',
+		url: '/otherspage_under',
+		data: JSON.stringify({ "othersName": $('#othersName').val() }),
+		contentType: 'application/json',
+		datatype: 'json',
+		scriptCharset: 'utf-8'
+	})
+	.then((result) => {
+		let othersList = JSON.parse(result);
+		let otherspageUnder = $('#othersPage').find('.under');
+		
+		$(motherpageUnder).children().remove();
+		
+		othersList.forEach((others, index) => {
+			//bottom
+			let othersItem = $('<div />', { 'class': 'othersItem'});
+			$('<p />', {  'class': 'othersNameUnder', 'text': others.userName } ).appendTo(othersItem);
+			$('<p />', {  'class': 'othersPostTime', 'text': others.postedAt } ).appendTo(othersItem);
+			$('<p />', {  'class': 'othersComment', 'text': others.comment } ).appendTo(othersItem);
+			$(othersItem).appendTo(otherpageUnder);
+		})
+		$("#otherspage").dialog("open");
+	}, () => {
+		console.error('Error: ajax connection failed.');
+	}
+	);
+};

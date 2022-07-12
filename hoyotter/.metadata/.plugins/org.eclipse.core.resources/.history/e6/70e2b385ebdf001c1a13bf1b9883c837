@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title>hoyotter:Timeline</title>
+        <!--favicon-->
+        <link rel="icon" type="image/png" href="images/favicon.ico">
+        <!--defaultcss-->
+        <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">   
+        <!--fonts-->
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300&family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+        
+        <!--css-->
+        <link href="css/timeline.css" rel="stylesheet">
+        <!--js-->
+        <script src="/js/timeline.js" th:src="@{/js/timeline.js}"></script>
+        <script>
+            $("#myBtn").on('click', myProfile);
+            $("#otherUser").on('click', otherProfile);
+        </script>
+        
+    </head>
+    
+    <body>
+        
+        <main>
+            
+            <div class="left">
+                <h1>hoyotter</h1>
+                <ul>
+                    
+                    <li><a href="mypage.html">Mypage</a></li>
+                    <li><a href="login.html" th:href="@{/}">Account Change</a></li>
+                </ul>
+                <input type="hidden" id="hiddenUserId" th:value="${userId}"/>
+            </div><!--.left-->
+
+            <div class="center">
+                <h1>Timeline</h1>
+                <div class="yourForm">
+                    <form action="/addComment" th:action="@{/addComment}" method="post" class="commentForm" id="commentForm" >
+                        <input type="button" class="userBtn" id="myBtn">
+                        <input type="text" placeholder="input your comment" name="comment">
+                        <input type="hidden" id="userName" name="userName" th:value="${loginSession.userName}">
+                        <input type="submit" value="comment" class="commentBtn">
+                    </form><!--.commentForm-->
+                </div><!--.yourForm-->
+
+                <div class="square">Comments</div>
+
+                <div class="timeline">
+                    <div class="item">
+                        <div class="userAndTime" th:each="item : ${comments}">
+                            <input type="button" class="userBtn" id="mypageBtn"/>
+                            <input class="name" th:value="${item.userName}">
+                            <input class="time" th:value="${item.postedAt}">
+                            <input class="userComment" th:value="${item.comment}">
+                        </div>
+                    </div>
+                    
+                    
+                </div><!--timeline-->
+            </div><!--.center-->
+
+            <div class="right">
+                <h1>Other Users</h1>
+                <div class="usersTable">
+                    <div class="users" th:each="others : ${otherUsers}">
+                        <div class="user" ><input type="button" class="userBtn" id="otherUserBtn"><input th:value="${others.userName}" /></div>
+                    
+                    </div><!--.users-->
+                </div>    
+            </div><!--.right-->
+
+        </main>
+        
+    </body>
+
+</html>

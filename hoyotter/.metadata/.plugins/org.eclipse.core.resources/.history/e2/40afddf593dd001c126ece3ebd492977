@@ -1,0 +1,39 @@
+package com.example.hoyotter.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.hoyotter.model.dao.CommentRepository;
+import com.example.hoyotter.model.dao.UserRepository;
+import com.example.hoyotter.model.entity.Comment;
+import com.example.hoyotter.model.form.CommentForm;
+import com.example.hoyotter.model.form.LoginForm;
+
+@Controller
+public class TimelineController {
+    
+	@Autowired
+	private UserRepository userRepos;
+	
+	@Autowired
+	private CommentRepository commentRepos;
+	
+	@RequestMapping("/addComment")
+	public String addComment(CommentForm commentForm, LoginForm loginForm, Model model) {
+		model.addAttribute("id", loginForm.getId());
+		model.addAttribute("userName", loginForm.getUserName());
+		model.addAttribute("password", loginForm.getPassword());
+		
+		Comment comment = new Comment();
+		comment.setComment(commentForm.getComment());
+		
+		comment.setUserName(commentForm.getUserName());
+		commentRepos.saveAndFlush(comment);
+		
+		
+		return "redirect:/timeline";
+	}
+	
+}

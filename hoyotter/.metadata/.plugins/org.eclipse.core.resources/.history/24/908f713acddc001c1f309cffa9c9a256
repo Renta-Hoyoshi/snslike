@@ -1,0 +1,5 @@
+package com.example.hoyotter.model.dto;
+
+public class LoginDto {
+
+}
